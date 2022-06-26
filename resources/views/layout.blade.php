@@ -171,7 +171,7 @@
 
                     </div>
                     <p class="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
-                        © 2020 Workflow, Inc. All rights reserved.
+                        © 2022
                     </p>
                 </div>
             </div>
