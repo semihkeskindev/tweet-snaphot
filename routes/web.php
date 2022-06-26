@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/', [\App\Http\Controllers\HomeController::class, 'searchTweet'])->middleware('auth');
+
+Route::get('/tweet/{tweet:tweet_id}', [\App\Http\Controllers\TwitterController::class, 'show'])->name('tweets.show');
+
+Route::group(['middleware' => 'auth', 'prefix' => 'profile'], function () {
+    Route::get('son-kaydettiklerim', [\App\Http\Controllers\Profile\TwitterController::class, 'lastSavedTweets'])->name('profile.lastSavedTweets');
 });
+
+Auth::routes();
+

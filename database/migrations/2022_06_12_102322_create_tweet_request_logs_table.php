@@ -16,6 +16,7 @@ class CreateTweetRequestLogsTable extends Migration
         Schema::create('tweet_request_logs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tweet_id');
+            $table->foreignId('user_id')->nullable();
             $table->json('response');
             $table->integer('status_code');
             $table->timestamps();

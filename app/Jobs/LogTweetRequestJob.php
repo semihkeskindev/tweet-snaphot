@@ -20,15 +20,17 @@ class LogTweetRequestJob implements ShouldQueue
     private int $tweetId;
     private array $result;
     private int $statusCode;
+    private int|null $userId;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(int $tweetId, array $result, int $statusCode)
+    public function __construct(int $tweetId, int|null $userId, array $result, int $statusCode)
     {
         $this->tweetId = $tweetId;
+        $this->userId = $userId;
         $this->result = $result;
         $this->statusCode = $statusCode;
     }
@@ -41,6 +43,7 @@ class LogTweetRequestJob implements ShouldQueue
     public function handle()
     {
         $log = new TweetRequestLog();
+        $log->user_id = $this->userId;
         $log->tweet_id = $this->tweetId;
         $log->response = $this->result;
         $log->status_code = $this->statusCode;

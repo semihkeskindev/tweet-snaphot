@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Jobs\LogTweetRequestJob;
 use App\Models\Tweet;
+use App\Models\User;
 use App\Utils\Helper;
 use Atymic\Twitter\Exception\ClientException as TwitterClientException;
 use function PHPUnit\Framework\throwException;
@@ -51,11 +52,14 @@ class TwitterService
         return (int) $tweetId;
     }
 
-    public function getTweetById(int $id): array
+    public function getTweetById(int $id): Tweet
     {
+        /** @var Tweet $tweet */
         $tweet = Tweet::query()->where('tweet_id', $id)->first();
 
         if ($tweet) {
+            $this->saveTweetSavingRequestOfUser($tweet->id, auth()->id());
+
             return $tweet;
         }
 
@@ -81,7 +85,11 @@ class TwitterService
             throw new \Exception($result, 404);
         }
 
-        return $this->saveTweetData($id, 'getTweet', $tweetDetail);
+        $tweet = $this->saveTweetData($id, 'getTweet', $tweetDetail);
+
+        $this->saveTweetSavingRequestOfUser($tweet->id, auth()->id());
+
+        return $tweet;
     }
 
     private function isTweetAlreadyRequestedBefore(int $id): bool
@@ -94,10 +102,19 @@ class TwitterService
         return 'tweet-'.$id.'.json';
     }
 
+    private function saveTweetSavingRequestOfUser(int $tweetId, int $userId)
+    {
+        /** @var User $user */
+        $user = User::query()->find($userId);
+
+        $user->tweets()->syncWithoutDetaching([$tweetId]);
+    }
+
     private function saveTweetData(int $tweetId, string $requestMethodName, array $data): Tweet
     {
         $tweet = new Tweet();
         $tweet->tweet_id = $tweetId;
+        $tweet->user_id = auth()->id();
         $tweet->request_method_name = $requestMethodName;
         $tweet->data = $data;
         $tweet->save();

@@ -15,6 +15,7 @@ class CreateTweetsTable extends Migration
     {
         Schema::create('tweets', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable();
             $table->unsignedBigInteger('tweet_id')->unique();
             $table->string('request_method_name');
             $table->json('data');
