@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::post('/', [\App\Http\Controllers\HomeController::class, 'searchTweet'])->middleware('auth');
+Route::post('/', [\App\Http\Controllers\HomeController::class, 'searchTweet'])
+    ->middleware(['auth', 'throttle:30,1']);
 
 Route::get('/tweet/{tweet:tweet_id}', [\App\Http\Controllers\TwitterController::class, 'show'])->name('tweets.show');
 
