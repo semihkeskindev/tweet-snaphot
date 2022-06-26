@@ -74,7 +74,9 @@
                     <div class="flow-root mt-6">
                         @foreach($lastTweets as $tweet)
                             <div class="relative focus-within:ring-2 focus-within:ring-indigo-500 mb-5">
-                                @include('layouts.partials.tweet_card', ['tweet' => $tweet])
+                                <a href="{{ route('tweets.show', ['tweet' => $tweet->tweet_id]) }}">
+                                    @include('layouts.partials.tweet_card', ['tweet' => $tweet])
+                                </a>
                             </div>
                         @endforeach
                     </div>

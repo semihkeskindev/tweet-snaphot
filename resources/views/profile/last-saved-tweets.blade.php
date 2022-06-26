@@ -14,7 +14,7 @@
                             @foreach($tweets as $tweet)
                                 <div class="relative focus-within:ring-2 focus-within:ring-indigo-500 mb-5">
                                     <a href="{{ route('tweets.show', ['tweet' => $tweet->tweet_id]) }}">
-                                    @include('layouts.partials.tweet_card', ['tweet' => $tweet])
+                                        @include('layouts.partials.tweet_card', ['tweet' => $tweet])
                                     </a>
                                 </div>
                             @endforeach
